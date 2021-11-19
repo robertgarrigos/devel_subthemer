@@ -8,18 +8,9 @@ Installation and usage
 
 1. Copy Devel Subthemer directory to your modules directory
 2. Enable the module at the module administration page
-3. This module depends on Coder Upgrade which will also need to be installed
-4. Under the base directory Coder Upgrade creates three subdirectories:
- - old
- - new
- - patch
-5. To create a subtheme, go to admin/config/development/devel-subthemer and
+3. To create a subtheme, go to admin/devel/devel-subthemer and
 fill out the form as required.
-6. The subtheme will be created, then copied to the 'new' directory.
-
-Dependencies
-------------
-Coder Upgrade.
+4. The subtheme will be created, then copied to the 'themes' directory.
 
 License
 -------
@@ -35,5 +26,6 @@ Current Maintainers
 Credits
 -------
 
+Based on code from Coder Module by 
 Jim Berry ("solotandem", http://drupal.org/user/240748)
 
