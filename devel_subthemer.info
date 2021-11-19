@@ -1,0 +1,8 @@
+name = Devel Subthemer
+description = Builds a subtheme from a provided base.
+package = Development
+backdrop = 1.x
+type = module
+;dependencies[] = devel
+
+;configure = admin/config/development/devel-subthemer
