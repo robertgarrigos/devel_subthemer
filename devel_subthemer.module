@@ -462,9 +462,9 @@ function devel_subthemer_bool_to_string($value) {
  * Implements hook_system_theme_page_alter().
  */
 function devel_subthemer_system_themes_page_alter(&$theme_groups) {
-  $all_currently_available_themes = array_keys(list_themes());
-
   if (user_access('administer subthemer')) {
+    $all_currently_available_themes = array_keys(list_themes());
+
     foreach ($theme_groups as $group => $members) {
       if (!empty($group)) {
         foreach ($members as $key => $theme) {
