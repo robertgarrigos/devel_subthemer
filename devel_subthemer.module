@@ -325,31 +325,10 @@ function devel_subthemer_process_theme_directory($form_state) {
 
   // Build the info file.
   $themes = system_rebuild_theme_data();
-  $data = $themes[$theme_name]->info;
-  $new_data['name'] = $values['name'];
-  $new_data['description'] = t('Subtheme of ') . $data['name'];
-  $new_data['type'] = 'theme';
-  $new_data['backdrop'] = '1.x';
-  $new_data['base theme'] = $theme_name;
-  $new_data['newline1'] = 'newline';
+  $values['theme_name'] = $theme_name;
+  $info_file_array = devel_subthemer_build_info_file_array($themes, $values);
 
-  if (!empty($values['styles'])) {
-    $new_data['stylesheets'] = array('all' => backdrop_map_assoc($values['styles']));
-  }
-  $new_data['newline2'] = 'newline';
-
-  if (!empty($values['styles'])) {
-    $new_data['scripts'] = $values['scripts'];
-  }
-  $new_data['newline3'] = 'newline';
-
-  if (empty($values['copy_settings']) && !empty($values['copy_color'])) {
-    $new_data['settings']['color'] = 'true';
-  }
-
-  backdrop_alter('devel_subthemer_build_info_file', $new_data);
-
-  $info_file = devel_subthemer_build_info_file($new_data);
+  $info_file = devel_subthemer_build_info_file($info_file_array);
   $info_file_path = $new_dirname . '/' . $values['subtheme_name'] . '.info';
   file_put_contents($info_file_path, $info_file);
 
@@ -435,11 +414,46 @@ function devel_subthemer_copy_dir($item) {
 }
 
 /**
+ * Build an info file content structure array.
+ */
+function devel_subthemer_build_info_file_array($themes, $values) {
+  $theme_name = $values['theme_name'];
+  $data = $themes[$theme_name]->info;
+  $info_file_array['name'] = $values['name'];
+  $info_file_array['description'] = t('Subtheme of ') . $data['name'];
+  $info_file_array['type'] = 'theme';
+  $info_file_array['backdrop'] = '1.x';
+  $info_file_array['base theme'] = $theme_name;
+  $info_file_array['newline1'] = 'newline';
+
+  if (!empty($values['copy_color'])) {
+    $values['styles'][] = 'css/colors.css';
+  }
+  if (!empty($values['styles'])) {
+    $info_file_array['stylesheets'] = array('all' => backdrop_map_assoc($values['styles']));
+  }
+  $info_file_array['newline2'] = 'newline';
+
+  if (!empty($values['styles'])) {
+    $info_file_array['scripts'] = $values['scripts'];
+  }
+  $info_file_array['newline3'] = 'newline';
+
+  if (empty($values['copy_settings']) && !empty($values['copy_color'])) {
+    $info_file_array['settings']['color'] = 'true';
+  }
+
+  backdrop_alter('devel_subthemer_build_info_file', $info_file_array);
+
+  return $info_file_array;
+}
+
+/**
  * Build an info file content structure.
  */
-function devel_subthemer_build_info_file($theme) {
+function devel_subthemer_build_info_file($info_file_array) {
   $content = "";
-  foreach ($theme as $key => $elem) {
+  foreach ($info_file_array as $key => $elem) {
     if (is_array($elem)) { 
       foreach ($elem as $subkey => $data) { 
         if (is_array($data)) { 
