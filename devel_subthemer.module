@@ -51,12 +51,11 @@ function devel_subthemer_form($form, &$form_state, $theme = NULL) {
   $form_state['theme_name'] = $default;
 
   $form['intro'] = array(
-    '#type' => 'markup',
-    '#markup' => 'Completing this form will generate a subtheme 
-    file in your themes directory. To get started you can add additional 
-    css files or edit the custom.css file that we suggest below. For more
+    '#type' => 'help',
+    '#markup' => t('Completing this form will generate a subtheme 
+    file in your themes directory. For more
     information see our documentation on 
-    <a href="https://docs.backdropcms.org/documentation/creating-sub-themes">creating a subtheme.</a>'
+    <a href="https://docs.backdropcms.org/documentation/creating-sub-themes">creating a subtheme.</a>'),
   );
 
   $form['name'] = array(
@@ -132,7 +131,7 @@ function devel_subthemer_form($form, &$form_state, $theme = NULL) {
   $form['styles'] = array(
     '#type' => 'textarea',
     '#title' => t('Add stylesheet paths'),
-    '#description' => t('Enter relative paths, one per line. A blank CSS file will be created at this path. For example <em>css/style.css</em> (file placed in a "css" folder) or <em>skin.css</em> (file placed in root).'),
+    '#description' => t('Enter relative paths, one per line. A blank CSS file will be created at this path. For example <em>css/custom.css</em> (file placed in a "css" folder) or <em>style.css</em> (file placed in root).'),
     '#rows' => 3,
     '#default_value' => 'css/custom.css',
   );

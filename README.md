@@ -8,7 +8,7 @@ Installation and usage
 
 1. Copy Devel Subthemer directory to your modules directory
 2. Enable the module at the module administration page
-3. To create a subtheme, go to admin/devel/devel-subthemer and
+3. To create a subtheme, go to admin/config/development/devel-subthemer and
 fill out the form as required.
 4. The subtheme will be created, then copied to the 'themes' directory.
 
