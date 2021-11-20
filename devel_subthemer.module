@@ -38,6 +38,8 @@ function devel_subthemer_menu() {
 function devel_subthemer_form($form, &$form_state, $theme = NULL) {
   $form['#tree'] = FALSE;
   $themes = system_rebuild_theme_data();
+  $page_title = t('Create subtheme');
+  $hide_theme_selection = FALSE;
 
   $options = array();
   foreach ($themes as $theme_name => $theme_info) {
@@ -50,8 +52,12 @@ function devel_subthemer_form($form, &$form_state, $theme = NULL) {
   }
   elseif ($theme) {
     $default = $theme;
+    $page_title = t('Create subtheme from @theme', array('@theme' => $options[$theme]));
+    $hide_theme_selection = TRUE;
   }
   $form_state['theme_name'] = $default;
+
+  backdrop_set_title($page_title);
 
   $form['intro'] = array(
     '#type' => 'help',
@@ -78,20 +84,28 @@ function devel_subthemer_form($form, &$form_state, $theme = NULL) {
     ),
     '#description' => t('Subtheme machine name'),
   );
-  $form['base_theme'] = array(
-    '#type' => 'select',
-    '#title' => t('Base theme'),
-    '#options' => $options,
-    '#parents' => array('base_theme'),
-    '#default_value' => $default,
-    '#ajax' => array(
-      'callback' => 'base_theme_wrapper_change_callback',
-      'wrapper' => 'base_theme_wrapper',
-      'event' => 'change',
-      'method' => 'replace',
-      'effect' => 'fade',
-    ),
-  );
+  if ($hide_theme_selection) {
+    $form['base_theme'] = array(
+      '#type' => 'hidden',
+      '#value' => $default,
+    );
+  }
+  else {
+    $form['base_theme'] = array(
+      '#type' => 'select',
+      '#title' => t('Base theme'),
+      '#options' => $options,
+      '#parents' => array('base_theme'),
+      '#default_value' => $default,
+      '#ajax' => array(
+        'callback' => 'base_theme_wrapper_change_callback',
+        'wrapper' => 'base_theme_wrapper',
+        'event' => 'change',
+        'method' => 'replace',
+        'effect' => 'fade',
+      ),
+    );
+  }
   $form['base_theme_wrapper'] = array(
     '#type' => 'container',
     '#id' => 'base_theme_wrapper',
