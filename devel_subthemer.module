@@ -465,22 +465,21 @@ function devel_subthemer_bool_to_string($value) {
  * Implements hook_system_theme_page_alter().
  */
 function devel_subthemer_system_themes_page_alter(&$theme_groups) {
-  if (!user_access('administer subthemer')) {
-    return;
-  }
-  foreach ($theme_groups as $group => $members) {
-    if (empty($group)) {
-      continue;
-    }
-    foreach ($members as $key => $theme) {
-      if (!backdrop_theme_access($theme)) {
-        continue;
+  if (user_access('administer subthemer')) {
+    $all_currently_available_themes = array_keys(list_themes());
+
+    foreach ($theme_groups as $group => $members) {
+      if (!empty($group)) {
+        foreach ($members as $key => $theme) {
+          if (in_array($theme->name, $all_currently_available_themes)) {
+            $theme_groups[$group][$key]->operations[] = array(
+              'title' => t('Create subtheme'),
+              'href' => 'admin/config/development/devel-subthemer/' . $theme->name,
+              'attributes' => array('title' => t('Create subtheme of @theme', array('@theme' => $theme->info['name']))),
+            );
+          }
+        }
       }
-      $theme_groups[$group][$key]->operations[] = array(
-        'title' => t('Create subtheme'),
-        'href' => 'admin/config/development/devel-subthemer/' . $theme->name,
-        'attributes' => array('title' => t('Create subtheme of @theme', array('@theme' => $theme->info['name']))),
-      );
     }
   }
 }
