@@ -20,7 +20,7 @@ function devel_subthemer_permission() {
  * Implements hook_menu().
  */
 function devel_subthemer_menu() {
-  $items['admin/devel/devel-subthemer'] = array(
+  $items['admin/config/development/devel-subthemer'] = array(
     'title' => 'Create subtheme',
     'description' => 'Create subtheme from a base theme.',
     'page callback' => 'backdrop_get_form',
@@ -130,7 +130,7 @@ function devel_subthemer_form($form, &$form_state) {
     '#type' => 'submit',
     '#validate' => array('devel_subthemer_form_validate'),
     '#submit' => array('devel_subthemer_form_submit'),
-    '#value' => t('Convert files'),
+    '#value' => t('Create subtheme'),
   );
 
   return $form;
@@ -192,11 +192,10 @@ function devel_subthemer_form_validate($form, &$form_state) {
  * Submit handler for the subtheme creation form.
  */
 function devel_subthemer_form_submit($form, &$form_state) {
-  $form_state['rebuild'] = TRUE;
-
   $success = devel_subthemer_process_theme_directory($form_state);
   if ($success) {
     backdrop_set_message(t('Subtheme was created.'));
+    $form_state['redirect'] = 'admin/appearance';
   }
   else {
     backdrop_set_message(t('Subtheme creation failed to complete.'), 'error');
