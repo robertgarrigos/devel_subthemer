@@ -119,6 +119,7 @@ function devel_subthemer_form($form, &$form_state) {
     '#title' => t('Add stylesheet paths'),
     '#description' => t('Enter relative paths, one per line. A blank CSS file will be created at this path. For example <em>css/style.css</em> (file placed in a "css" folder) or <em>skin.css</em> (file placed in root).'),
     '#rows' => 3,
+    '#default_value' => 'css/custom.css',
   );
   $form['scripts'] = array(
     '#type' => 'textarea',
