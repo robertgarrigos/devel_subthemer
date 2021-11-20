@@ -52,9 +52,8 @@ function devel_subthemer_form($form, &$form_state) {
     '#markup' => 'Completing this form will generate a subtheme 
     file in your themes directory. To get started you can add additional 
     css files or edit the custom.css file that we suggest below. For more
-    information see our documentation on <a href="https://docs.backdropcms.org/documentation/creating-sub-themes">creating a subtheme.</a>'
-
-
+    information see our documentation on 
+    <a href="https://docs.backdropcms.org/documentation/creating-sub-themes">creating a subtheme.</a>'
   );
 
   $form['name'] = array(
