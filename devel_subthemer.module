@@ -37,9 +37,12 @@ function devel_subthemer_menu() {
  */
 function devel_subthemer_form($form, &$form_state, $theme = NULL) {
   $form['#tree'] = FALSE;
-  $dirs = system_rebuild_theme_data();
+  $themes = system_rebuild_theme_data();
 
-  $options = backdrop_map_assoc(array_keys($dirs));
+  $options = array();
+  foreach ($themes as $theme_name => $theme_info) {
+    $options[$theme_name] = $theme_info->info['name'];
+  }
 
   $default = 'basis';
   if (isset($form_state['values']['list'])) {
@@ -103,7 +106,7 @@ function devel_subthemer_form($form, &$form_state, $theme = NULL) {
     '#description' => t('Include this if you plan to modify the color module settings.'),
     );
   }
-  if (!empty($dirs[$default]->info['settings'])) {
+  if (!empty($themes[$default]->info['settings'])) {
     $form['base_theme_wrapper']['copy_settings'] = array(
     '#type' => 'checkbox',
     '#parent' => 'settings',
@@ -306,8 +309,8 @@ function devel_subthemer_process_theme_directory($form_state) {
   }
 
   // Build the info file.
-  $dirs = system_rebuild_theme_data();
-  $data = $dirs[$theme_name]->info;
+  $themes = system_rebuild_theme_data();
+  $data = $themes[$theme_name]->info;
   $new_data['name'] = $values['name'];
   $new_data['description'] = t('Subtheme of ') . $data['name'];
   $new_data['type'] = 'theme';
