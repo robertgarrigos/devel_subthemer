@@ -158,7 +158,8 @@ function devel_subthemer_form($form, &$form_state, $theme = NULL) {
     '#description' => t('Enter relative paths, one per line. A blank JS file will be created at this path. For example <em>js/scripts.js</em> (file placed in a "js" folder) or <em>js-scripts.js</em> (file placed in root).'),
     '#rows' => 3,
   );
-  $form['convert'] = array(
+  $form['actions'] = array('#type' => 'actions');
+  $form['actions']['create_subtheme'] = array(
     '#type' => 'submit',
     '#validate' => array('devel_subthemer_form_validate'),
     '#submit' => array('devel_subthemer_form_submit'),
