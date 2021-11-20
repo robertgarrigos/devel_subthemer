@@ -45,8 +45,8 @@ function devel_subthemer_form($form, &$form_state, $theme = NULL) {
   }
 
   $default = 'basis';
-  if (isset($form_state['values']['list'])) {
-    $default = $form_state['values']['list'];
+  if (isset($form_state['values']['base_theme'])) {
+    $default = $form_state['values']['base_theme'];
   }
   elseif ($theme) {
     $default = $theme;
@@ -78,11 +78,11 @@ function devel_subthemer_form($form, &$form_state, $theme = NULL) {
     ),
     '#description' => t('Subtheme machine name'),
   );
-  $form['list'] = array(
+  $form['base_theme'] = array(
     '#type' => 'select',
     '#title' => t('Base theme'),
     '#options' => $options,
-    '#parents' => array('list'),
+    '#parents' => array('base_theme'),
     '#default_value' => $default,
     '#ajax' => array(
       'callback' => 'base_theme_wrapper_change_callback',
