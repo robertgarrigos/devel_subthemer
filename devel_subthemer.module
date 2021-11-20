@@ -35,7 +35,7 @@ function devel_subthemer_menu() {
 /**
  * Form builder for the subtheme creation form.
  */
-function devel_subthemer_form($form, &$form_state) {
+function devel_subthemer_form($form, &$form_state, $theme = NULL) {
   $form['#tree'] = FALSE;
   $dirs = system_rebuild_theme_data();
 
@@ -44,6 +44,9 @@ function devel_subthemer_form($form, &$form_state) {
   $default = 'basis';
   if (isset($form_state['values']['list'])) {
     $default = $form_state['values']['list'];
+  }
+  elseif ($theme) {
+    $default = $theme;
   }
   $form_state['theme_name'] = $default;
 
@@ -441,4 +444,28 @@ function devel_subthemer_build_info_file($theme) {
  */
 function devel_subthemer_bool_to_string($value) {
   return is_bool($value) ? (TRUE ? "true" : "false") : $value;
+}
+
+/**
+ * Implements hook_system_theme_page_alter().
+ */
+function devel_subthemer_system_themes_page_alter(&$theme_groups) {
+  if (!user_access('administer subthemer')) {
+    return;
+  }
+  foreach ($theme_groups as $group => $members) {
+    if (empty($group)) {
+      continue;
+    }
+    foreach ($members as $key => $theme) {
+      if (!backdrop_theme_access($theme)) {
+        continue;
+      }
+      $theme_groups[$group][$key]->operations[] = array(
+        'title' => t('Create subtheme'),
+        'href' => 'admin/config/development/devel-subthemer/' . $theme->name,
+        'attributes' => array('title' => t('Create subtheme of @theme', array('@theme' => $theme->info['name']))),
+      );
+    }
+  }
 }
