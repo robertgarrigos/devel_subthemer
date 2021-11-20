@@ -52,10 +52,7 @@ function devel_subthemer_form($form, &$form_state, $theme = NULL) {
 
   $form['intro'] = array(
     '#type' => 'help',
-    '#markup' => t('Completing this form will generate a subtheme 
-    file in your themes directory. For more
-    information see our documentation on 
-    <a href="https://docs.backdropcms.org/documentation/creating-sub-themes">creating a subtheme.</a>'),
+    '#markup' => t('This form automates the initial creation of a subtheme. A new folder will be created in your themes directory, with all the necessary files (according to selected options below). For more information, see the documentation on <a href="@link">creating a subtheme</a>.', array('@link' => url('https://docs.backdropcms.org/documentation/creating-sub-themes'))),
   );
 
   $form['name'] = array(
