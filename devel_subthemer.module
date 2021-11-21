@@ -202,8 +202,12 @@ function devel_subthemer_form_validate($form, &$form_state) {
     $styles = array_map('trim', $styles);
     $styles = array_filter($styles, 'strlen');
     foreach ($styles as $key => $style) {
-      if (substr_compare($style, '.css', -4, 4) != 0) {
+      $pathinfo = pathinfo($style);
+      if (valid_url($style) && strpos($pathinfo['dirname'], ".") === false && isset($pathinfo['extension']) && $pathinfo['extension'] == 'css') {
         $styles[$key] = $style . '.css';
+      }
+      else {
+        form_set_error('styles', t('One or more of your stylesheet paths is not valid.'));
       }
     }
     $form_state['values']['styles'] = $styles;
@@ -213,8 +217,12 @@ function devel_subthemer_form_validate($form, &$form_state) {
     $scripts = array_map('trim', $scripts);
     $scripts = array_filter($scripts, 'strlen');
     foreach ($scripts as $key => $script) {
-      if (substr_compare($script, '.js', -3, 3) != 0) {
-        $scripts[$key] = $script . '.js';
+      $pathinfo = pathinfo($script);
+      if (valid_url($script) && strpos($pathinfo['dirname'], ".") === false && isset($pathinfo['extension']) && $pathinfo['extension'] == 'js') {
+        $scripts[$key] = $script . '.css';
+      }
+      else {
+        form_set_error('scripts', t('One or more of your script paths is not valid.'));
       }
     }
     $form_state['values']['scripts'] = $scripts;
