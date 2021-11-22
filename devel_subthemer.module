@@ -204,7 +204,7 @@ function devel_subthemer_form_validate($form, &$form_state) {
     foreach ($styles as $key => $style) {
       $pathinfo = pathinfo($style);
       if (valid_url($style) && strpos($pathinfo['dirname'], ".") === false && isset($pathinfo['extension']) && $pathinfo['extension'] == 'css') {
-        $styles[$key] = $style . '.css';
+        $styles[$key] = $style;
       }
       else {
         form_set_error('styles', t('One or more of your stylesheet paths is not valid.'));
@@ -219,7 +219,7 @@ function devel_subthemer_form_validate($form, &$form_state) {
     foreach ($scripts as $key => $script) {
       $pathinfo = pathinfo($script);
       if (valid_url($script) && strpos($pathinfo['dirname'], ".") === false && isset($pathinfo['extension']) && $pathinfo['extension'] == 'js') {
-        $scripts[$key] = $script . '.css';
+        $scripts[$key] = $script;
       }
       else {
         form_set_error('scripts', t('One or more of your script paths is not valid.'));
