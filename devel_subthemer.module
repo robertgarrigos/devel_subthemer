@@ -56,6 +56,7 @@ function devel_subthemer_form($form, &$form_state, $theme = NULL) {
     $hide_theme_selection = TRUE;
   }
   $form_state['theme_name'] = $default;
+  $form_state['themes'] = $themes;
 
   backdrop_set_title($page_title);
 
@@ -270,7 +271,7 @@ function devel_subthemer_process_theme_directory($form_state) {
   foreach ($allowed_filenames as $filename) {
     if (file_exists($dirname . '/' . $filename)) {
       copy($dirname . '/' . $filename, $new_dirname . '/' . $filename);
-      devel_subthemer_convert_file($new_dirname . '/' . $filename);
+      devel_subthemer_convert_file($new_dirname . '/' . $filename, $form_state);
     }
   }
 
@@ -347,7 +348,7 @@ function devel_subthemer_process_theme_directory($form_state) {
  * @param string $filename
  *   The new name of the file to convert.
  */
-function devel_subthemer_convert_file($filename) {
+function devel_subthemer_convert_file($filename, $form_state) {
   if (!file_exists($filename)) {
     return FALSE;
   }
@@ -359,9 +360,12 @@ function devel_subthemer_convert_file($filename) {
   $new = $cur;
 
   if ($extension != 'js') {
-    // @Todo: We could apply regex routines here to rename stuff.
+    // String replacement of the base theme human readable name.
+    $theme_full_name = $form_state['themes'][$form_state['theme_name']]->info['name'];
+    $new = str_replace($theme_full_name, $form_state['values']['name'], $new);
+    // String replacement of the base theme machine name.
+    $new = str_replace($form_state['theme_name'], $form_state['values']['subtheme_name'], $new);
   }
-  // @Todo: We could apply regex routines here to rename stuff.
 
   // Write the new file.
   if ($new != $cur) {
@@ -379,8 +383,6 @@ function devel_subthemer_convert_file($filename) {
  *   Array of a directory containing the files to convert.
  */
 function devel_subthemer_copy_dir($item) {
-  global $_coder_upgrade_module_name;
-
   $dirname = $item['old_dir'];
   $new_dirname = $item['new_dir'];
 
