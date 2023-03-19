@@ -182,7 +182,7 @@ function devel_subthemer_theme_templates($theme_name) {
     $template_list[$file->uri] = $file->filename;
   }
   return $template_list;
-    
+
 }
 
 function devel_subthemer_theme_exists($theme_name) {
@@ -267,7 +267,7 @@ function devel_subthemer_process_theme_directory($form_state) {
   if (!empty($values['copy_settings'])) {
     $allowed_filenames[] = 'theme-settings.php';
   }
-    
+
   foreach ($allowed_filenames as $filename) {
     if (file_exists($dirname . '/' . $filename)) {
       copy($dirname . '/' . $filename, $new_dirname . '/' . $filename);
@@ -281,7 +281,7 @@ function devel_subthemer_process_theme_directory($form_state) {
       'old_dir' => $dirname . '/color',
       'new_dir' => $new_dirname . '/color',
     );
-    devel_subthemer_copy_dir($copy_color_item);
+    devel_subthemer_copy_dir($copy_color_item, $form_state);
   }
 
   // Create a templates directory if needed.
@@ -317,7 +317,7 @@ function devel_subthemer_process_theme_directory($form_state) {
       file_put_contents($new_dirname . '/' . $script, '');
     }
   }
-  
+
   // Modify the template.php code.
   if (!empty($values['copy_template_php'])) {
     $template_php_content = "<?php\n";
@@ -382,7 +382,7 @@ function devel_subthemer_convert_file($filename, $form_state) {
  * @param array $item
  *   Array of a directory containing the files to convert.
  */
-function devel_subthemer_copy_dir($item) {
+function devel_subthemer_copy_dir($item, $form_state) {
   $dirname = $item['old_dir'];
   $new_dirname = $item['new_dir'];
 
@@ -411,11 +411,11 @@ function devel_subthemer_copy_dir($item) {
         'old_dir' => $dirname . '/' . $filename,
         'new_dir' => $new_dirname . '/' . $filename,
       );
-      devel_subthemer_copy_dir($new_item);
+      devel_subthemer_copy_dir($new_item, $form_state);
     }
     elseif (!is_dir($dirname . '/' . $filename)) {
       copy($dirname . '/' . $filename, $new_dirname . '/' . $filename);
-      devel_subthemer_convert_file($new_dirname . '/' . $filename);
+      devel_subthemer_convert_file($new_dirname . '/' . $filename, $form_state);
     }
   }
 }
@@ -461,9 +461,9 @@ function devel_subthemer_build_info_file_array($themes, $values) {
 function devel_subthemer_build_info_file($info_file_array) {
   $content = "";
   foreach ($info_file_array as $key => $elem) {
-    if (is_array($elem)) { 
-      foreach ($elem as $subkey => $data) { 
-        if (is_array($data)) { 
+    if (is_array($elem)) {
+      foreach ($elem as $subkey => $data) {
+        if (is_array($data)) {
           foreach ($data as $subsubkey => $subdata) {
             $rendered_key = is_numeric($subkey) ? '' : $subkey;
             $content .= $key ."[" . $rendered_key . "][] = " . devel_subthemer_bool_to_string($data[$subsubkey]) . "\n";
@@ -473,8 +473,8 @@ function devel_subthemer_build_info_file($info_file_array) {
           $rendered_key = is_numeric($subkey) ? '' : $subkey;
           $content .= $key ."[" . $rendered_key . "] = " . devel_subthemer_bool_to_string($elem[$subkey]) . "\n";
         }
-      } 
-    } 
+      }
+    }
     elseif ($elem == "newline") {
       $content .= "\n";
     }
@@ -485,7 +485,7 @@ function devel_subthemer_build_info_file($info_file_array) {
     }
     else {
       $content .= $key . " = " . devel_subthemer_bool_to_string($elem) . "\n";
-    }      
+    }
   }
   return $content;
 }
